@@ -115,6 +115,8 @@ object SinkApp extends App {
     val recordLimit = buffer.getString("record-limit")
     val timeLimit = buffer.getString("time-limit")
 
+    val maxRecords = kinesisIn.getString("max-records")
+
     props.setProperty(KinesisConnectorConfiguration.PROP_KINESIS_INPUT_STREAM, streamName)
     props.setProperty(KinesisConnectorConfiguration.PROP_KINESIS_ENDPOINT, kEndpoint)
     props.setProperty(KinesisConnectorConfiguration.PROP_APP_NAME, appName)
@@ -134,6 +136,8 @@ object SinkApp extends App {
 
     // The emit method retries sending to S3 indefinitely, so it only needs to be called once
     props.setProperty(KinesisConnectorConfiguration.PROP_RETRY_LIMIT, "1")
+
+    props.setProperty(KinesisConnectorConfiguration.PROP_MAX_RECORDS, maxRecords)
 
     new KinesisConnectorConfiguration(props, credentials)
   }
