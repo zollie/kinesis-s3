@@ -93,6 +93,12 @@ object LzoSerializer {
           log.warn(e)
           (record._1, List("Error writing raw event to output stream: [%s]".format(e.toString)).fail)
         }
+
+        // Need to log OutOfMemoryErrors
+        case t: Throwable => {
+          log.error("Error writing raw stream to output stream", t)
+          throw t
+        }
       }
     })
 
