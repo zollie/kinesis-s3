@@ -28,6 +28,9 @@ import com.amazonaws.auth.AWSCredentialsProvider
 // AWS Kinesis Connector libs
 import com.amazonaws.services.kinesis.connectors.KinesisConnectorConfiguration
 
+// Loggings
+import org.apache.commons.logging.LogFactory
+
 // This project
 import sinks._
 
@@ -35,6 +38,8 @@ import sinks._
  * The entrypoint class for the Kinesis-S3 Sink applciation.
  */
 object SinkApp extends App {
+
+  val log = LogFactory.getLog(getClass)
 
   // Argument specifications
   import ArgotConverters._
@@ -138,6 +143,8 @@ object SinkApp extends App {
     props.setProperty(KinesisConnectorConfiguration.PROP_RETRY_LIMIT, "1")
 
     props.setProperty(KinesisConnectorConfiguration.PROP_MAX_RECORDS, maxRecords)
+
+    log.info(s"Initializing sink with KinesisConnectorConfiguration: $props")
 
     new KinesisConnectorConfiguration(props, credentials)
   }

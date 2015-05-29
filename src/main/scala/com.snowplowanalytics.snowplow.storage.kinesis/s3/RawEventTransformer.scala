@@ -24,6 +24,9 @@ import org.apache.thrift.{TSerializer,TDeserializer}
 // Apache commons
 import org.apache.commons.codec.binary.Base64
 
+// Loggings
+import org.apache.commons.logging.LogFactory
+
 // Scalaz
 import scalaz._
 import Scalaz._
@@ -32,10 +35,16 @@ import Scalaz._
  * Thrift serializer/deserializer class
  */
 class RawEventTransformer extends ITransformer[ ValidatedRecord, EmitterInput ] {
+
+  val log = LogFactory.getLog(getClass)
+
   lazy val serializer = new TSerializer()
   lazy val deserializer = new TDeserializer()
 
   override def toClass(record: Record): ValidatedRecord = {
+
+    log.info("Converting one record to EmitterInput before adding it to the buffer")
+
     val recordByteArray = record.getData.array
     (new String(Base64.encodeBase64(recordByteArray)), recordByteArray.success)
   }
